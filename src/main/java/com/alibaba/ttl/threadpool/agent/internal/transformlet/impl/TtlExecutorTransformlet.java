@@ -33,7 +33,7 @@ import static com.alibaba.ttl.threadpool.agent.internal.transformlet.impl.Utils.
 public class TtlExecutorTransformlet implements JavassistTransformlet {
     private static final Logger logger = Logger.getLogger(TtlExecutorTransformlet.class);
 
-    private static Set<String> EXECUTOR_CLASS_NAMES = new HashSet<String>();
+    private static final Set<String> EXECUTOR_CLASS_NAMES = new HashSet<String>();
     private static final Map<String, String> PARAM_TYPE_NAME_TO_DECORATE_METHOD_CLASS = new HashMap<String, String>();
 
     private static final String THREAD_POOL_EXECUTOR_CLASS_NAME = "java.util.concurrent.ThreadPoolExecutor";
@@ -57,9 +57,8 @@ public class TtlExecutorTransformlet implements JavassistTransformlet {
 
     @Override
     public void doTransform(@NonNull final ClassInfo classInfo) throws IOException, NotFoundException, CannotCompileException {
+        final CtClass clazz = classInfo.getCtClass();
         if (EXECUTOR_CLASS_NAMES.contains(classInfo.getClassName())) {
-            final CtClass clazz = classInfo.getCtClass();
-
             for (CtMethod method : clazz.getDeclaredMethods()) {
                 updateSubmitMethodsOfExecutorClass_decorateToTtlWrapperAndSetAutoWrapperAttachment(method);
             }
@@ -68,8 +67,6 @@ public class TtlExecutorTransformlet implements JavassistTransformlet {
 
             classInfo.setModified();
         } else {
-            final CtClass clazz = classInfo.getCtClass();
-
             if (clazz.isPrimitive() || clazz.isArray() || clazz.isInterface() || clazz.isAnnotation()) {
                 return;
             }
@@ -100,9 +97,9 @@ public class TtlExecutorTransformlet implements JavassistTransformlet {
                 String code = String.format(
                         // decorate to TTL wrapper,
                         // and then set AutoWrapper attachment/Tag
-                        "$%d = %s.get($%d, false, true);"
-                                + "\ncom.alibaba.ttl.threadpool.agent.internal.transformlet.impl.Utils.setAutoWrapperAttachment($%<d);",
-                        i + 1, PARAM_TYPE_NAME_TO_DECORATE_METHOD_CLASS.get(paramTypeName), i + 1);
+                        "$%d = %s.get($%1$d, false, true);"
+                                + "\ncom.alibaba.ttl.threadpool.agent.internal.transformlet.impl.Utils.setAutoWrapperAttachment($%1$d);",
+                        i + 1, PARAM_TYPE_NAME_TO_DECORATE_METHOD_CLASS.get(paramTypeName));
                 logger.info("insert code before method " + signatureOfMethod(method) + " of class " + method.getDeclaringClass().getName() + ": " + code);
                 insertCode.append(code);
             }

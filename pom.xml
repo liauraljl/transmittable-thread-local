@@ -90,8 +90,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<kotlin.version>1.3.72</kotlin.version>
-		<kotlin.coroutine.version>1.3.7</kotlin.coroutine.version>
+		<kotlin.version>1.4.10</kotlin.version>
+		<kotlin.coroutine.version>1.3.9</kotlin.coroutine.version>
 	</properties>
 
 	<dependencies>
@@ -114,7 +114,7 @@
 		<dependency>
 			<groupId>com.github.spotbugs</groupId>
 			<artifactId>spotbugs-annotations</artifactId>
-			<version>4.0.6</version>
+			<version>4.1.2</version>
 			<optional>true</optional>
 		</dependency>
 		<!--
@@ -323,11 +323,11 @@
 				<version>4.0.4</version>
 			</plugin>
 			<!--
-					official docs: https://maven.apache.org/enforcer/enforcer-rules/requireMavenVersion.html
+				official docs: https://maven.apache.org/enforcer/enforcer-rules/requireMavenVersion.html
 
-					add maven-enforce-plugin to make sure the right jdk is used
-					https://stackoverflow.com/a/18420462/922688
-				-->
+				add maven-enforce-plugin to make sure the right jdk is used
+				https://stackoverflow.com/a/18420462/922688
+			-->
 			<plugin>
 				<artifactId>maven-enforcer-plugin</artifactId>
 				<version>3.0.0-M3</version>
@@ -353,7 +353,7 @@
 				-->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.7</version>
+				<version>2.8.1</version>
 				<configuration>
 					<rulesUri>file://${project.basedir}/src/versions-rules.xml</rulesUri>
 					<generateBackupPoms>false</generateBackupPoms>
@@ -368,7 +368,7 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.2.0</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-source-plugin</artifactId>
@@ -571,7 +571,7 @@
 					<plugin>
 						<groupId>pl.project13.maven</groupId>
 						<artifactId>git-commit-id-plugin</artifactId>
-						<version>4.0.0</version>
+						<version>4.0.2</version>
 						<executions>
 							<execution>
 								<id>get-the-git-infos</id>
@@ -644,7 +644,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>force-jdk-11+when-do-release</id>
+			<id>force-jdk11-when-release</id>
 			<activation>
 				<property>
 					<name>performRelease</name>

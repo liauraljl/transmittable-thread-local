@@ -1,4 +1,4 @@
-# 📌 Transmittable ThreadLocal(TTL) 📌
+# 📌 TransmittableThreadLocal(TTL) 📌
 
 [![Build Status](https://travis-ci.org/alibaba/transmittable-thread-local.svg?branch=master)](https://travis-ci.org/alibaba/transmittable-thread-local)
 [![Windows Build Status](https://img.shields.io/appveyor/ci/oldratlee/transmittable-thread-local/master.svg?label=windows%20build)](https://ci.appveyor.com/project/oldratlee/transmittable-thread-local)
@@ -32,6 +32,9 @@
         - [2.3 Use Java Agent to decorate thread pool implementation class](#23-use-java-agent-to-decorate-thread-pool-implementation-class)
 - [🔌 Java API Docs](#-java-api-docs)
 - [🍪 Maven Dependency](#-maven-dependency)
+- [🔨 About compilation, build and dev](#-about-compilation-build-and-dev)
+    - [How to compile and build](#how-to-compile-and-build)
+    - [How to development by `IDE`](#how-to-development-by-ide)
 - [🗿 More Documentation](#-more-documentation)
 - [📚 Related Resources](#-related-resources)
     - [JDK Core Classes](#jdk-core-classes)
@@ -45,7 +48,7 @@
 
 👉 The missing Java™ std lib(simple & 0-dependency) for framework/middleware,
 provide an enhanced `InheritableThreadLocal` that transmits `ThreadLocal` value between threads even using thread pooling components.
-Support `Java` 15/14/13/12/11/10/9/8/7/6.
+Support `Java` 16/15/14/13/12/11/10/9/8/7/6.
 
 Class [`InheritableThreadLocal`](https://docs.oracle.com/javase/10/docs/api/java/lang/InheritableThreadLocal.html) in `JDK`
 can transmit value to child thread from parent thread.
@@ -57,7 +60,7 @@ If you have problem or question, please [submit Issue](https://github.com/alibab
 
 # 🎨 Requirements
 
-The Requirements listed below is also why I sort out `TTL` in my work.
+The Requirements listed below is also why I sort out `TransmittableThreadLocal` in my work.
 
 - Application container or high layer framework transmit information to low layer sdk.
 - Transmit context to logging without application code aware.
@@ -268,6 +271,37 @@ The current version Java API documentation: <https://alibaba.github.io/transmitt
 ```
 
 Check available version at [search.maven.org](https://search.maven.org/search?q=g:com.alibaba%20AND%20a:transmittable-thread-local&core=gav).
+
+# 🔨 About compilation, build and dev
+
+## How to compile and build
+
+Compilation/build environment require **_`JDK 8~11`_**; Compilation can be performed in the normal way of `Maven`.
+
+\# The project already contains `Maven` that satisfied the required version, directly run **_`mvnw` in the project root directory_**; there is no need to manually install `Maven` by yourself.
+
+```bash
+# Run test case
+./mvnw test
+# Compile and package
+./mvnw package
+# Run test case, compile and package, install TTL library to local Maven
+./mvnw install
+
+##################################################
+# If you use `Maven` installed by yourself, the version requirement: maven 3.3.9+
+
+mvn install
+```
+
+## How to development by `IDE`
+
+If you use `IDE` to develop (such as `IntelliJ IDEA`), note that:
+open **_the `pom4ide.xml` file in the root directory of the project_** instead of `pom.xml` via `IDE`;
+To avoid `IDE` complain using `JDK 8` standard library classes not found.
+
+The reason that `IDE` support is not good / have to change a `POM` file, is:  
+The code implementation of `TTL` uses the `JDK 8` standard library class, but it is compiled into a `Java 6` version class files.
 
 # 🗿 More Documentation
 

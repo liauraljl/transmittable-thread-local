@@ -1,4 +1,4 @@
-# 📌 Transmittable ThreadLocal(TTL) 📌
+# 📌 TransmittableThreadLocal(TTL) 📌
 
 [![Build Status](https://travis-ci.org/alibaba/transmittable-thread-local.svg?branch=master)](https://travis-ci.org/alibaba/transmittable-thread-local)
 [![Windows Build Status](https://img.shields.io/appveyor/ci/oldratlee/transmittable-thread-local/master.svg?label=windows%20build)](https://ci.appveyor.com/project/oldratlee/transmittable-thread-local)
@@ -35,6 +35,7 @@
             - [`Java`的启动参数配置](#java%E7%9A%84%E5%90%AF%E5%8A%A8%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE)
 - [🔌 Java API Docs](#-java-api-docs)
 - [🍪 Maven依赖](#-maven%E4%BE%9D%E8%B5%96)
+- [🔨 关于编译构建与`IDE`开发](#-%E5%85%B3%E4%BA%8E%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA%E4%B8%8Eide%E5%BC%80%E5%8F%91)
 - [❓ FAQ](#-faq)
 - [🗿 更多文档](#-%E6%9B%B4%E5%A4%9A%E6%96%87%E6%A1%A3)
 - [📚 相关资料](#-%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99)
@@ -48,13 +49,13 @@
 # 🔧 功能
 
 👉 在使用线程池等会池化复用线程的执行组件情况下，提供`ThreadLocal`值的传递功能，解决异步执行时上下文传递的问题。
-一个`Java`标准库本应为框架/中间件设施开发提供的标配能力，本库功能聚焦 & 0依赖，支持`Java` 15/14/13/12/11/10/9/8/7/6。
+一个`Java`标准库本应为框架/中间件设施开发提供的标配能力，本库功能聚焦 & 0依赖，支持`Java` 16/15/14/13/12/11/10/9/8/7/6。
 
 `JDK`的[`InheritableThreadLocal`](https://docs.oracle.com/javase/10/docs/api/java/lang/InheritableThreadLocal.html)类可以完成父线程到子线程的值传递。但对于使用线程池等会池化复用线程的执行组件的情况，线程由线程池创建好，并且线程是池化起来反复使用的；这时父子线程关系的`ThreadLocal`值传递已经没有意义，应用需要的实际上是把 **任务提交给线程池时**的`ThreadLocal`值传递到 **任务执行时**。
 
 本库提供的[`TransmittableThreadLocal`](src/main/java/com/alibaba/ttl/TransmittableThreadLocal.java)类继承并加强[`InheritableThreadLocal`](https://docs.oracle.com/javase/10/docs/api/java/lang/InheritableThreadLocal.html)类，解决上述的问题，使用详见[User Guide](#-user-guide)。
 
-整个`TTL`库的核心功能（用户`API`与框架/中间件的集成`API`、线程池`ExecutorService`/`ForkJoinPool`/`TimerTask`及其线程工厂的`Wrapper`），只有不到 **_1000 `SLOC`代码行_**，非常精小。
+整个`TransmittableThreadLocal`库的核心功能（用户`API`与框架/中间件的集成`API`、线程池`ExecutorService`/`ForkJoinPool`/`TimerTask`及其线程工厂的`Wrapper`），只有 **_~1000 `SLOC`代码行_**，非常精小。
 
 欢迎 👏
 
@@ -63,11 +64,11 @@
 
 # 🎨 需求场景
 
-在`ThreadLocal`的需求场景即是`TTL`的潜在需求场景，如果你的业务需要『在使用线程池等会池化复用线程的执行组件情况下传递`ThreadLocal`』则是`TTL`目标场景。
+在`ThreadLocal`的需求场景即是`TransmittableThreadLocal`的潜在需求场景，如果你的业务需要『在使用线程池等会池化复用线程的执行组件情况下传递`ThreadLocal`』则是`TransmittableThreadLocal`目标场景。
 
 下面是几个典型场景例子。
 
-1. 分布式跟踪系统
+1. 分布式跟踪系统 或 全链路压测（即链路打标）
 2. 日志收集记录系统上下文
 3. `Session`级`Cache`
 4. 应用容器或上层框架跨应用代码给下层`SDK`传递信息
@@ -308,6 +309,26 @@ java -javaagent:path/to/ttl-foo-name-changed.jar \
 ```
 
 可以在 [search.maven.org](https://search.maven.org/search?q=g:com.alibaba%20AND%20a:transmittable-thread-local&core=gav) 查看可用的版本。
+
+# 🔨 关于编译构建与`IDE`开发
+
+编译构建的环境要求： **_`JDK 8~11`_**；用`Maven`常规的方式执行编译构建即可：  
+\# 在工程中已经包含了符合版本要求的`Maven`，直接运行 **_工程根目录下的`mvnw`_**；并不需要先手动自己安装好`Maven`。
+
+```bash
+# 运行测试Case
+./mvnw test
+# 编译打包
+./mvnw package
+# 运行测试Case、编译打包、安装TTL库到Maven本地
+./mvnw install
+
+#####################################################
+# 如果使用你自己安装的`Maven`，版本要求：maven 3.3.9+
+mvn install
+```
+
+如何用`IDE`来开发时注意点，更多说明参见 [文档 如何用`IDE`开发 - Developer Guide](docs/developer-guide.md#%E5%A6%82%E4%BD%95%E7%94%A8ide%E5%BC%80%E5%8F%91)。
 
 # ❓ FAQ
 
